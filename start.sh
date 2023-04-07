@@ -28,3 +28,5 @@ _create_directory "$CONFIG_PATH"
 _create_directory "$RESOURCES"
 
 source modules/create_content_file/create_content_entity.sh
+
+_create_entity "$DOMAIN_CLASSES" "$ENTITY_PATH"
