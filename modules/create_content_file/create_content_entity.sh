@@ -1,47 +1,41 @@
 #!/bin/bash
 
 # Função para criar diretórios
-# @param $1 "$DOMAIN_CLASSES"
-# @param $2 "$ENTITY_PATH_CLASS" 
+# @global: $DOMAIN_CLASSES
+# @global: $ENTITY_PATH
 _create_entity() {
-  # Extrair argumentos
-  local -a DOMAINS=("$1") # Usar referência para o array de argumentos
-  local PATH_CLASS="$2"
-
-    echo "DOMAINS: ${DOMAINS[@]}" # Adicione esta linha para depuração
-
     # Gerar classes de entidades
-    for DOMAIN_CLASS in "${DOMAINS[@]}"; do
+    for DOMAIN_CLASS in "${DOMAIN_CLASSES[@]}"; do
     CLASS_NAME=$(echo "$DOMAIN_CLASS" | cut -d':' -f1)
     CLASS_FIELDS=$(echo "$DOMAIN_CLASS" | cut -d':' -f2)
     
     # Gerar classe de entidade
     echo "Gerando classe de entidade: $ENTITY/${CLASS_NAME}Entity.java" | sed 's/\//./g'
-    echo "package com.${PROJECT_NAME}.app.persistence.entity;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import javax.persistence.Entity;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import javax.persistence.GeneratedValue;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import javax.persistence.GenerationType;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import javax.persistence.Id;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import javax.persistence.Table;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import lombok.AllArgsConstructor;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import lombok.Builder;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import lombok.Data;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import lombok.NoArgsConstructor;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "import java.util.List;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+    echo "package com.${PROJECT_NAME}.app.persistence.entity;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import javax.persistence.Entity;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import javax.persistence.GeneratedValue;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import javax.persistence.GenerationType;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import javax.persistence.Id;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import javax.persistence.Table;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import lombok.AllArgsConstructor;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import lombok.Builder;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import lombok.Data;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import lombok.NoArgsConstructor;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "import java.util.List;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
 
-    echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@Entity" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@Table(name=\"$CLASS_NAME\")" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@Data" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@Builder" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@AllArgsConstructor" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "@NoArgsConstructor" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "public class ${CLASS_NAME}Entity {" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+    echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@Entity" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@Table(name=\"$CLASS_NAME\")" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@Data" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@Builder" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@AllArgsConstructor" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "@NoArgsConstructor" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "public class ${CLASS_NAME}Entity {" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
 
     echo "Gerar atributos da classe"
-    echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+    echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     IFS=',' read -ra FIELDS <<< "$CLASS_FIELDS"
     for FIELD in "${FIELDS[@]}"; do
         FIELD_NAME=$(echo "$FIELD" | cut -d'=' -f1)
@@ -50,7 +44,7 @@ _create_entity() {
 
         # Adiciona o sufixo Entity ao tipo do campo, caso ele corresponda 
         # a uma classe em DOMAIN_CLASSES
-        for DOMAIN_CLASS2 in "${DOMAINS[@]}"; do
+        for DOMAIN_CLASS2 in "${DOMAIN_CLASSES[@]}"; do
             CLASS_NAME2=$(echo "$DOMAIN_CLASS2" | cut -d':' -f1)
         if [[ "$FIELD_TYPE" == "$CLASS_NAME2" ]]; then
             FIELD_TYPE="${CLASS_NAME2}Entity"
@@ -68,7 +62,7 @@ _create_entity() {
         fi
         done
 
-        echo "  private $FIELD_TYPE $FIELD_NAME;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+        echo "  private $FIELD_TYPE $FIELD_NAME;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     done
 
     # Gera metodos Getter e Setter
@@ -92,7 +86,7 @@ _create_entity() {
             FIELD_TYPE="List<$ELEMENT_TYPE>"
         else
             # Adicionar o sufixo "Entity" ao tipo do campo, se corresponder a uma classe em "DOMAIN_CLASSES"
-            for DOMAIN_CLASS2 in "${DOMAINS[@]}"; do
+            for DOMAIN_CLASS2 in "${DOMAIN_CLASSES[@]}"; do
             CLASS_NAME2=$(echo "$DOMAIN_CLASS2" | cut -d':' -f1)
             if [[ "$FIELD_TYPE" == "$CLASS_NAME2" ]]; then
                 FIELD_TYPE="${CLASS_NAME2}Entity"
@@ -101,29 +95,29 @@ _create_entity() {
             done
         fi
         # Gerar método get
-        echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-        echo "  public $FIELD_TYPE get${FIELD_NAME^}() {" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+        echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+        echo "  public $FIELD_TYPE get${FIELD_NAME^}() {" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
         echo "    return this.$FIELD_NAME;" >> "$2/${CLASS_NAME}Entity.java"
-        echo "  }" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+        echo "  }" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
         # Gerar método set
-        echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-        echo "  public void set${FIELD_NAME^}($FIELD_TYPE $FIELD_NAME) {" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-        echo "    this.$FIELD_NAME = $FIELD_NAME;" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-        echo "  }" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+        echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+        echo "  public void set${FIELD_NAME^}($FIELD_TYPE $FIELD_NAME) {" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+        echo "    this.$FIELD_NAME = $FIELD_NAME;" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+        echo "  }" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     done
 
     # Gerar método toString
-    echo "" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "  @Override" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "  public String toString() {" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "    return \"${CLASS_NAME}Entity{\" +" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+    echo "" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "  @Override" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "  public String toString() {" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "    return \"${CLASS_NAME}Entity{\" +" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     for FIELD in "${FIELDS[@]}"; do
         FIELD_NAME=$(echo "$FIELD" | cut -d'=' -f1)
 
-        echo "      \"$FIELD_NAME=\" + $FIELD_NAME +" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+        echo "      \"$FIELD_NAME=\" + $FIELD_NAME +" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     done
-    echo "      \"}\";" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "  }" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
-    echo "}" >> "$PATH_CLASS/${CLASS_NAME}Entity.java"
+    echo "      \"}\";" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "  }" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
+    echo "}" >> "$ENTITY_PATH/${CLASS_NAME}Entity.java"
     done
 }

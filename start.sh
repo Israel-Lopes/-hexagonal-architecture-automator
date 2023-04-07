@@ -7,6 +7,8 @@ source config/directories_path.sh
 source utils/painel.sh
 # Funcao para criar diretorios
 source utils/mk.sh
+# Cria classes
+source modules/create_content_file/create_content_entity.sh
 
 # Titulo do programa
 _print_painel
@@ -27,6 +29,5 @@ _create_directory "$OUT_PATH"
 _create_directory "$CONFIG_PATH"
 _create_directory "$RESOURCES"
 
-source modules/create_content_file/create_content_entity.sh
-
-_create_entity "$DOMAIN_CLASSES" "$ENTITY_PATH"
+# Cria classes
+_create_entity
