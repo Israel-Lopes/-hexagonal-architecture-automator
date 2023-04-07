@@ -3,11 +3,9 @@
 # Carrega as constantes do projeto
 source config/classes_template.sh
 source config/directories_path.sh
-# Banner do projeto
 source utils/painel.sh
-# Funcao para criar diretorios
 source utils/mk.sh
-# Cria classes
+
 source modules/create_content_file/create_content_entity.sh
 source modules/create_content_file/create_content_domain.sh
 

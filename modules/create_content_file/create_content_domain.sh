@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Função para criar classes
+# Função para criar classes domain
 # @global: $DOMAIN_CLASSES
 # @global: $DOMAIN_PATH
 _create_domain() {
