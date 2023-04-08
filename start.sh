@@ -8,6 +8,7 @@ source utils/mk.sh
 
 source modules/create_content_file/create_content_entity.sh
 source modules/create_content_file/create_content_domain.sh
+source modules/create_content_file/create_content_service.sh
 
 # Titulo do programa
 _print_painel
@@ -31,3 +32,4 @@ _create_directory "$RESOURCES"
 # Cria classes
 _create_entity
 _create_domain
+_create_service
