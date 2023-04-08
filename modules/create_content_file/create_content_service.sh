@@ -133,5 +133,65 @@ public class Create${CLASS_NAME}Service implements Create${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_CREATE"
+
+
+        # Gera classe de service para atualizar
+        local ELEMENT_UPDATE="$SERVICE_PATH/Create${CLASS_NAME}Service.java"
+
+        echo "
+package com.${PROJECT_NAME}.app.application.core.service;
+
+import ${PROJECT_NAME}.app.application.core.domain.${CLASS_NAME};
+import ${PROJECT_NAME}.app.application.ports.out.Update${CLASS_NAME}Port;
+
+public class Update${CLASS_NAME}Service implements Update${CLASS_NAME}ServicePort {
+
+    private final Update${CLASS_NAME}Port update${CLASS_NAME}Port;
+
+    public Update${CLASS_NAME}Service(Update${CLASS_NAME}Port update${CLASS_NAME}Port) {
+        this.update${CLASS_NAME}Port = update${CLASS_NAME}Port;
+    }
+
+    @Override
+    public ${CLASS_NAME} update${CLASS_NAME}(${CLASS_NAME} ${CLASS_NAME,}) {
+
+        var ${CLASS_NAME,}update = update${CLASS_NAME}Port.update(id);
+        
+        // Validar update e fazer o set dos campos de ${CLASS_NAME} 
+
+        return update${CLASS_NAME}Port.update(${CLASS_NAME,});
+    }
+}
+        " >> "$ELEMENT_UPDATE"
+        
+
+        # Gera classe de service para deletar
+        local ELEMENT_DELETE="$SERVICE_PATH/Delete${CLASS_NAME}Service.java"
+
+        echo "
+package com.${PROJECT_NAME}.app.application.core.service;
+
+import ${PROJECT_NAME}.app.application.core.domain.${CLASS_NAME};
+import ${PROJECT_NAME}.app.application.ports.out.Delete${CLASS_NAME}Port;
+
+public class Delete${CLASS_NAME}Service implements Delete${CLASS_NAME}ServicePort {
+
+    private final Delete${CLASS_NAME}Port Delete${CLASS_NAME}Port;
+
+    public Delete${CLASS_NAME}Service(Delete${CLASS_NAME}Port delete${CLASS_NAME}Port) {
+        this.delete${CLASS_NAME}Port = create${CLASS_NAME}Port;
+    }
+
+    @Override
+    public ${CLASS_NAME} delete${CLASS_NAME}(${CLASS_NAME} ${CLASS_NAME,}, Long id) {
+
+        var ${CLASS_NAME,}delete = delete${CLASS_NAME}Port.delete(id);
+        
+        // Validar delete de ${CLASS_NAME} 
+
+        return delete${CLASS_NAME}Port.delete(${CLASS_NAME,});
+    }
+}
+        " >> "$ELEMENT_DELETE"
     done
 }
