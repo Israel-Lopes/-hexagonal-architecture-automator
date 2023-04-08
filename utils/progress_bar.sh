@@ -1,17 +1,27 @@
 #!/bin/bash
 
+total_progress=1
+current_progress=0
+
+# @global: $total_progress
+# @global: $current_progress
 # Função para exibir barra de progresso animada
-progress_bar() {
+_progress_bar() {
   local total="$1"
   local progress="$2"
   local bar_length=30
   local bar=""
   local percentage=""
+
+    # Definir a cor verde usando código de escape ANSI
+  GREEN='\033[32m'
+  # Resetar a cor para o padrão
+  RESET='\033[0m'
   
   # Calcula o tamanho da barra de progresso e a porcentagem
   local num=$((progress * bar_length / total))
   for ((i=0; i<num; i++)); do
-    bar+="="
+    bar+="░"
   done
   for ((i=num; i<bar_length; i++)); do
     bar+=" "
@@ -19,7 +29,7 @@ progress_bar() {
   percentage="$((progress * 100 / total))%"
   
   # Exibe a barra de progresso e a porcentagem
-  printf "\r[%s] %s" "$bar" "$percentage"
+  printf "\r[${GREEN}%s${RESET}] %s" "$bar" "$percentage"
 }
 
 # # Exemplo de uso da função progress_bar()

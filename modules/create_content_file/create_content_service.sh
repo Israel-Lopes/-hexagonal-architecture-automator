@@ -41,6 +41,10 @@ public class Search${CLASS_NAME}Service implements Search${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_SAVE"
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
+
 
 
         # Gera classe de service para busca
@@ -72,6 +76,9 @@ public class Search${CLASS_NAME}Service implements Search${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_SEARCH"
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
 
 
 # Gera classe de service para buscar todos
@@ -103,6 +110,9 @@ public class SearchAll${CLASS_NAME}Service implements SearchAll${CLASS_NAME}Serv
     }
 }
         " >> "$ELEMENT_SEARCH_ALL"
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
 
 
         # Gera classe de service para criar
@@ -133,6 +143,9 @@ public class Create${CLASS_NAME}Service implements Create${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_CREATE"
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
 
 
         # Gera classe de service para atualizar
@@ -163,7 +176,10 @@ public class Update${CLASS_NAME}Service implements Update${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_UPDATE"
-        
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
+
 
         # Gera classe de service para deletar
         local ELEMENT_DELETE="$SERVICE_PATH/Delete${CLASS_NAME}Service.java"
@@ -193,5 +209,8 @@ public class Delete${CLASS_NAME}Service implements Delete${CLASS_NAME}ServicePor
     }
 }
         " >> "$ELEMENT_DELETE"
+        _progress_bar "$total_progress" "$current_progress"
+        sleep 0.1
+        current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
     done
 }

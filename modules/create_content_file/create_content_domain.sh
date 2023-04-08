@@ -57,4 +57,8 @@ _create_domain() {
     echo "  }" >> "$ELEMENT"
     echo "}" >> "$ELEMENT"
     done
+
+    _progress_bar "$total_progress" "$current_progress"
+    sleep 0.1
+    current_progress=$(( (current_progress + 1) % (total_progress + 1) ))
 }

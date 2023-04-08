@@ -1,5 +1,6 @@
 #!/bin/bash
 
+source utils/progress_bar.sh
 # Carrega as constantes do projeto
 source config/classes_template.sh
 source config/directories_path.sh
